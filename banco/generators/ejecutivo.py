@@ -3,7 +3,7 @@ fake = Factory.create()
 table = '"ejecutivo"'
 idEjecutivo = 1
 for i in range(1, 201):
-    #date 
+    #hire date 
     day = fake.random_int(min=1, max=28)
     month = fake.random_int(min=4, max=12)
     year = fake.random_int(min=1993, max=2015)
