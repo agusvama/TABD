@@ -1,0 +1,11 @@
+set search_path to tarjeta;
+INSERT INTO "sucursal" VALUES(1, 'Louis Ranch', 994,'Forks','Nebraska',07627,'1994/3/27', '9922150026');
+INSERT INTO "sucursal" VALUES(2, 'Pamela Flats', 554,'Rest','West Virginia',50023,'1994/3/27', '8155715067');
+INSERT INTO "sucursal" VALUES(3, 'Ian Neck', 144,'Canyon','Ohio',70407,'1994/3/27', '2004458312');
+INSERT INTO "sucursal" VALUES(4, 'Elizabeth Hollow', 849,'Extensions','Utah',94891,'1994/3/27', '0000008978');
+INSERT INTO "sucursal" VALUES(5, 'Navarro Road', 209,'Union','Louisiana',59121,'1994/3/27', '1233028920');
+INSERT INTO "sucursal" VALUES(6, 'David Light', 173,'Alley','Washington',79169,'1994/3/27', '9519432466');
+INSERT INTO "sucursal" VALUES(7, 'Mark Park', 108,'Inlet','Minnesota',11060,'1994/3/27', '4300866972');
+INSERT INTO "sucursal" VALUES(8, 'Carroll Dam', 880,'Orchard','New York',91322,'1994/3/27', '8378977874');
+INSERT INTO "sucursal" VALUES(9, 'Hughes Rue', 359,'Vista','Connecticut',61041,'1994/3/27', '4954114418');
+INSERT INTO "sucursal" VALUES(10, 'Byrd Extensions', 904,'Islands','Indiana',87365,'1994/3/27', '6909753207');
