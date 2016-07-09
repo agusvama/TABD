@@ -1,4 +1,4 @@
-
+﻿
 -- Database: banco
 
 -- DROP DATABASE banco;
@@ -18,7 +18,7 @@ CREATE DATABASE banco
 CREATE SCHEMA banco
   AUTHORIZATION postgres;
 
-
+set search_path to banco;
 -- Table: banco.cliente
 
 -- DROP TABLE banco.cliente;
@@ -36,6 +36,7 @@ CREATE TABLE banco.cliente
   cp integer,
   fnacimiento date,
   telefono character varying,
+  sexo character,
   CONSTRAINT pk_cliente PRIMARY KEY ("idCliente")
 )
 WITH (
@@ -43,6 +44,7 @@ WITH (
 );
 ALTER TABLE banco.cliente
   OWNER TO postgres;
+
 
 
 -- Table: banco.sucursal
@@ -87,6 +89,7 @@ CREATE TABLE banco.ejecutivo
   ciudad character varying,
   cp integer,
   telefono character varying,
+  sexo character,
   CONSTRAINT pk_ejecutivo PRIMARY KEY ("idEjecutivo")
 )
 WITH (
@@ -128,19 +131,23 @@ CREATE TABLE banco.ahorro
   CONSTRAINT pk_ahorro PRIMARY KEY ("idAhorro"),
   CONSTRAINT fk_cliente FOREIGN KEY ("idCliente")
       REFERENCES banco.cliente ("idCliente") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_ejecutivo FOREIGN KEY ("idEjecutivo")
+      REFERENCES banco.ejecutivo ("idEjecutivo") MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_servicio FOREIGN KEY ("idServicio")
       REFERENCES banco.servicio ("idServicio") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_sucursal FOREIGN KEY ("idSucursal")
       REFERENCES banco.sucursal ("idSucursal") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      ON UPDATE CASCADE ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE
 );
 ALTER TABLE banco.ahorro
   OWNER TO postgres;
+
 
 
 -- Table: banco.movimiento
@@ -159,7 +166,13 @@ CREATE TABLE banco.movimiento
   CONSTRAINT pk_movimiento PRIMARY KEY ("idMovimiento"),
   CONSTRAINT fk_ahorro FOREIGN KEY ("idAhorro")
       REFERENCES banco.ahorro ("idAhorro") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_ejecutivo FOREIGN KEY ("idEjecutivo")
+      REFERENCES banco.ejecutivo ("idEjecutivo") MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_sucursal FOREIGN KEY ("idSucursal")
+      REFERENCES banco.sucursal ("idSucursal") MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE
@@ -187,13 +200,16 @@ CREATE TABLE banco.prestamo
   CONSTRAINT pk_prestamo PRIMARY KEY ("idPrestamo"),
   CONSTRAINT fk_cliente FOREIGN KEY ("idCliente")
       REFERENCES banco.cliente ("idCliente") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_ejecutivo FOREIGN KEY ("idEjecutivo")
+      REFERENCES banco.ejecutivo ("idEjecutivo") MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_servicio FOREIGN KEY ("idServicio")
       REFERENCES banco.servicio ("idServicio") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_sucursal FOREIGN KEY ("idSucursal")
       REFERENCES banco.sucursal ("idSucursal") MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      ON UPDATE CASCADE ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

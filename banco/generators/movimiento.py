@@ -27,7 +27,7 @@ for i in range(1, 100001): #100000 cuentas de ahorro
     fcontratacion_ahorro = ahorro[1].year
 
     #from table ejecutivo get any idEjecutivo and idSucursal
-    get_this_ejecutivo = fake.random_int(min=1, max=148)
+    get_this_ejecutivo = fake.random_int(min=1, max=135)
     get_this_ejecutivo = (str(get_this_ejecutivo),)
     SQL2 = 'SELECT "idEjecutivo", "idSucursal", "fcontratacion" FROM ejecutivo WHERE "idEjecutivo" = (%s);' 
     cur_ejecutivo.execute(SQL2, get_this_ejecutivo)
@@ -76,5 +76,4 @@ for i in range(1, 100001): #100000 cuentas de ahorro
     #print fcontratacion_ahorro,
     #print fcontratacion_ejecutivo
     idMovimiento += 1
-
 

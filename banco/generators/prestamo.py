@@ -31,7 +31,7 @@ for i in range(1, 1000001): #1 000 000 prestamos
     #print cliente[1].year, #fnacimiento cliente
 
     #from table ejecutivo get any idEjecutivo and his idSucursal
-    get_this_ejecutivo = fake.random_int(min=1, max=148)
+    get_this_ejecutivo = fake.random_int(min=1, max=135)
     get_this_ejecutivo = (str(get_this_ejecutivo),)
     SQL2 = 'SELECT "idEjecutivo", "idSucursal", "fcontratacion" FROM ejecutivo WHERE "idEjecutivo" = (%s);' 
     cur_ejecutivo.execute(SQL2, get_this_ejecutivo)
@@ -71,3 +71,4 @@ for i in range(1, 1000001): #1 000 000 prestamos
     #print fnacimiento_cliente,
     #print fcontratacion_ejecutivo
     idPrestamo += 1
+
