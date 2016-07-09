@@ -43,6 +43,7 @@ for i in range(1, 50001):
     fnacimiento = cliente[9]
     telefono = cliente[10]
 
-    print "INSERT INTO %s VALUES(%s, '%s', '%s', '%s', '%s', %s, '%s', '%s', %s, '%s', '%s', %s);" %(table, idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono, idAhorro)
+    print "INSERT INTO %s VALUES(%s, '%s', '%s', '%s', '%s', %s, '%s', '%s', %s, '%s', '%s');" %(table, idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono)
 
     idAhorro +=1
+

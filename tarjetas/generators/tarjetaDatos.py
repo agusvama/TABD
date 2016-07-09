@@ -6,17 +6,19 @@ conn = psycopg2.connect("dbname=tarjeta user=postgres")
 conn2 = psycopg2.connect("dbname=banco user=postgres")
 
 # Open a cursor to perform database operations
-cur = conn.cursor()
+cur = conn2.cursor()
 cur_ahorro = conn2.cursor()
+cur_ejecutivo = conn.cursor()
 #point to the schema
-cur.execute("set search_path to tarjeta;")
+cur.execute("set search_path to banco;")
 cur_ahorro.execute("set search_path to banco;")
+cur_ejecutivo.execute("set search_path to tarjeta;")
 
 idAhorro = 1
 table = '"tarjetaDatos"'
-for i in range(1, 10):
-    #from table ahorro get fecha contratacion
-    SQL = 'SELECT "fcontratacion" FROM ahorro WHERE "idAhorro" = (%s)'
+for i in range(1, 50001):
+    #from table ahorro get fecha contratacion and idCliente
+    SQL = 'SELECT "fcontratacion", "idCliente" FROM "ahorro" WHERE "idAhorro" = (%s)'
     get_this_ahorro = (str(idAhorro), )
     cur_ahorro.execute(SQL, get_this_ahorro)
     ahorro = cur_ahorro.fetchone()
@@ -25,25 +27,32 @@ for i in range(1, 10):
     day = 1
     month = 1
     femision = str(fcontratacion_ahorro+1)+"/"+str(month)+"/"+str(day)
+    idCliente = ahorro[1]
 
-    #from table cliente get nombre, apellido, apellido where idAhorro = N
-    SQL = 'SELECT "nombre", "apellidoa", "apellidob" FROM cliente WHERE "idAhorro" = (%s)' 
-    get_this_cliente = (str(idAhorro), )
-    cur.execute(SQL, get_this_cliente) 
-    cliente = cur.fetchone()
-    idTarjeta = fake.numerify(text="################")
-    nombre = cliente[0]
-    apellidoa = cliente[1]
-    apellidob = cliente[2]
-    #need to build an expire date
-    fexpire = str(fcontratacion_ahorro+7)+"/"+str(month)+"/"+str(day)
-    cvc = fake.numerify(text="###")
-    if idAhorro < 25000:
-        tipo = "VISA"
+    #from table movimiento, get debe, haber, then limite = debe - haber, searching by idAhorro
+    SQL1 = 'SELECT "debe", "haber" FROM "movimiento" WHERE "idAhorro" = (%s)'
+    get_this_movimiento = (str(idAhorro), )
+    cur.execute(SQL1, get_this_movimiento) 
+    movimiento = cur.fetchone()
+    if movimiento == None:
+        limite = 500 #5 veces su ahorro, mas 500
     else:
-        tipo = "Mastercard"
+        debe = movimiento[0]
+        haber = movimiento[1]
+        limite = debe - haber
+        limite *= 5
+        limite += 500
+        tasa = fake.random_int(min=3, max=7)
 
-    print "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s');" %(table, idTarjeta, nombre, apellidoa, apellidob, fexpire, cvc, tipo)
+    #from table ejecutivo get idEjecutivo and idSucursal
+    SQL2 = 'SELECT "idEjecutivo", "idSucursal" FROM ejecutivo WHERE "idEjecutivo" = (%s)'
+    get_this_ejecutivo = fake.random_int(min=1, max=40)
+    get_this_ejecutivo = (str(get_this_ejecutivo), )
+    cur_ejecutivo.execute(SQL2, get_this_ejecutivo)
+    ejecutivo = cur_ejecutivo.fetchone()
+    idEjecutivo = ejecutivo[0]
+    idSucursal = ejecutivo[1]
+
+    print "INSERT INTO %s VALUES('%s', %s, %s, %s, %s, %s, %s);" %(table, femision, limite, tasa, idEjecutivo, idSucursal, idCliente, idAhorro)
 
     idAhorro += 1
-

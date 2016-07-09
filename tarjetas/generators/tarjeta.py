@@ -13,7 +13,7 @@ cur.execute("set search_path to tarjeta;")
 cur_ahorro.execute("set search_path to banco;")
 
 idAhorro = 1
-table = '"tarjeta"'
+table = '"tarjetaCredito"'
 for i in range(1, 50001):
     #from table cliente get nombre, apellido, apellido where idAhorro = N
     SQL = 'SELECT "nombre", "apellidoa", "apellidob" FROM cliente WHERE "idAhorro" = (%s)' 
@@ -25,11 +25,12 @@ for i in range(1, 50001):
     apellidoa = cliente[1]
     apellidob = cliente[2]
     #from table ahorro get fecha contratacion
-    SQL = 'SELECT "fcontratacion" FROM ahorro WHERE "idAhorro" = (%s)'
+    SQL = 'SELECT "fcontratacion", "idCliente" FROM ahorro WHERE "idAhorro" = (%s)'
     get_this_ahorro = (str(idAhorro), )
     cur_ahorro.execute(SQL, get_this_ahorro)
     ahorro = cur_ahorro.fetchone()
     fcontratacion_ahorro = ahorro[0].year
+    idCliente = ahorro[1]
     #need to build an emission date
     day = 1
     month = 1
@@ -42,7 +43,6 @@ for i in range(1, 50001):
     else:
         tipo = "Mastercard"
 
-    print "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s');" %(table, idTarjeta, nombre, apellidoa, apellidob, fexpire, cvc, tipo)
+    print "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', %s);" %(table, idTarjeta, nombre, apellidoa, apellidob, fexpire, cvc, tipo, idCliente)
 
     idAhorro += 1
-
