@@ -1,8 +1,8 @@
 ﻿set search_path to banco;
-
+--porcentaje de clientes por sexo--
 select "sexo", count("sexo"), ((count("sexo")*100)/100000.0) as "porcentaje" from cliente
 group by "sexo";
-
+--porcentaje de clientes por rangos de edad --
 select '15 a 17' as rango, 
 count(date_part('year', age("fnacimiento"))) as cantidad,
 round((count(date_part('year', age("fnacimiento")))*100)/100000.0,3) as porcentaje
@@ -42,7 +42,7 @@ from cliente
 where date_part('year', age("fnacimiento")) >= 60
 order by rango;
 
----------------------------------------------------------------------------------------
+-- porcentaje de clientes por sexo y rangos de edad --
 select 
 'F' as sexo,
 '15 a 17' as rango, 
@@ -153,64 +153,52 @@ order by rango, sexo;
 
 
 --total de clientes que han pedido un credito por rango de edad--
---cambiar cantidad por: total de clientes en ese rango de edad--
 
-select '15 a 17' as rango, 
-count(date_part('year', age("fnacimiento"))) as cantidad,
-count(c."idCliente") as Creditos
+select '15 a 17' as rango, count(DISTINCT(c."idCliente"))
 from cliente c
-INNER JOIN prestamo p
-on c."idCliente" = p."idCliente"
+NATURAL JOIN prestamo p
 where date_part('year', age("fnacimiento")) >= 15 and
 date_part('year', age("fnacimiento")) < 18
 
 UNION
-select '18 a 30' as rango, 
-count(date_part('year', age("fnacimiento"))) as cantidad,
-count(c."idCliente") as Creditos
+select '18 a 30' as rango, count(DISTINCT(c."idCliente"))
 from cliente c
-INNER JOIN prestamo p
-on c."idCliente" = p."idCliente"
+NATURAL JOIN prestamo p
 where date_part('year', age("fnacimiento")) >= 18 and
 date_part('year', age("fnacimiento")) < 31
 
 UNION
-select '31 a 40' as rango, 
-count(date_part('year', age("fnacimiento"))) as cantidad,
-count(c."idCliente") as Creditos
+select '31 a 40' as rango, count(DISTINCT(c."idCliente"))
 from cliente c
-INNER JOIN prestamo p
-on c."idCliente" = p."idCliente"
+NATURAL JOIN prestamo p
 where date_part('year', age("fnacimiento")) >= 31 and
 date_part('year', age("fnacimiento")) < 41
 
 UNION
-select '41 a 60' as rango, 
-count(date_part('year', age("fnacimiento"))) as cantidad,
-count(c."idCliente") as Creditos
+select '41 a 60' as rango, count(DISTINCT(c."idCliente"))
 from cliente c
-INNER JOIN prestamo p
-on c."idCliente" = p."idCliente"
+NATURAL JOIN prestamo p
 where date_part('year', age("fnacimiento")) >= 41 and
 date_part('year', age("fnacimiento")) < 60
 
 UNION
-select '60 o mas' as rango, 
-count(date_part('year', age("fnacimiento"))) as cantidad,
-count(c."idCliente") as Creditos
+select '60 o mas' as rango, count(DISTINCT(c."idCliente"))
 from cliente c
-INNER JOIN prestamo p
-on c."idCliente" = p."idCliente"
+NATURAL JOIN prestamo p
 where date_part('year', age("fnacimiento")) >= 60
+group by rango
+order by rango
+
+--total de clientes que han pedido prestamo, tienen cta ahorro, y de inversion(movimiento)
+--sum clientes, que figuren en las 3 tables
 
 
-order by rango;
-
-select c."idCliente", p."idCliente"
+select 'con prestamos, ahorros e inversiones' as personas,
+count(DISTINCT(c."idCliente")) as cantidad
 from cliente c
-left join prestamo p
+inner JOIN prestamo p
 on c."idCliente" = p."idCliente"
-
-select * from prestamo
-where "idCliente" = 63838
---solo tenemos 2 clientes que no figuran en la tabla prestamos--
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
