@@ -229,15 +229,27 @@ where p."idCliente" is null;
 
 --clientes que pidieron un prestamos a menos de 3 meses de ingresar al banco
 
-select distinct("idCliente") as clientes,min("fcontratacion") from prestamo as fecha
+select distinct("idCliente") as clientes, min("fcontratacion") from prestamo as fecha
 group by clientes
 order by clientes;
 
-select distinct("idCliente") as clientes,min("fcontratacion") from ahorro as fecha
-group by clientes
-order by clientes;
+select "idCliente", min("fcontratacion") as fecha
+from prestamo
+where "idCliente" = 1
+group by "idCliente"
+
+select "idCliente", min("fcontratacion") as fecha
+from ahorro
+where "idCliente" = 1
+group by "idCliente"
+order by fecha
+--limit 1;
 
 select distinct("idAhorro") as clientes,min("fmovimiento") from movimiento as fecha
 group by clientes
 order by clientes;
+
+select * from movimiento
+order by "idAhorro"
+
 

@@ -57,7 +57,7 @@ for i in range(1, 100001): #100000 cuentas de ahorro
         #print "entering condition 3",
         fcontratacion_movimiento = fnacimiento_cliente + 18
     '''
-    fcontratacion_movimiento = fcontratacion_ahorro + 1
+    fcontratacion_movimiento = fcontratacion_ahorro + 1 #year + 1
     if fcontratacion_movimiento < fcontratacion_ejecutivo:
         fcontratacion_movimiento = fcontratacion_ejecutivo + 1
     #fcontratacion_movimiento must be > fcontratacion_ahorro
