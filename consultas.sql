@@ -192,7 +192,6 @@ order by rango
 --total de clientes que han pedido prestamo, tienen cta ahorro, y de inversion(movimiento)
 --sum clientes, que figuren en las 3 tables
 
-
 select 'con prestamos, ahorros e inversiones' as personas,
 count(DISTINCT(c."idCliente")) as cantidad
 from cliente c
@@ -202,3 +201,43 @@ inner join ahorro a
 on c."idCliente" = a."idCliente"
 inner join movimiento m
 on a."idAhorro" = m."idAhorro"
+
+
+--clientes que tienen cta inversion, cta ahorro, sin prestamos
+select 'con inversiones, cta ahorro y sin prestamos' as personas,
+count(DISTINCT(c."idCliente")) as cantidad
+from cliente c
+left JOIN prestamo p
+on c."idCliente" = p."idCliente"
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where p."idCliente" is null and  a."idCliente" is null
+
+--total de clientes que tienen cta inversion y ningun prestamo
+select 'con inversiones y sin prestamos' as personas,
+count(DISTINCT(c."idCliente")) as cantidad
+from cliente c
+left JOIN prestamo p
+on c."idCliente" = p."idCliente"
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where p."idCliente" is null;
+
+--clientes que pidieron un prestamos a menos de 3 meses de ingresar al banco
+
+select distinct("idCliente") as clientes,min("fcontratacion") from prestamo as fecha
+group by clientes
+order by clientes;
+
+select distinct("idCliente") as clientes,min("fcontratacion") from ahorro as fecha
+group by clientes
+order by clientes;
+
+select distinct("idAhorro") as clientes,min("fmovimiento") from movimiento as fecha
+group by clientes
+order by clientes;
+
