@@ -18,7 +18,7 @@ cur_ahorro.execute(SCHEMA)
 cur_movimiento.execute(SCHEMA)
 cur_ejecutivo.execute(SCHEMA)
 #query variables
-id_cliente = 1
+id_cliente = 20001
 fprestamo = fahorro = 0
 #final variables
 fafiliacion = ""
@@ -54,11 +54,16 @@ def generator(how_many):
         query_prestamo()
         #print "idCliente  fprestamo fafiliacion"
         #print id_cliente, fprestamo, fafiliacion
-        print 'INSERT INTO "cliente" ("fafiliacion") VALUES (\'%s\');' %fafiliacion
-
+        print 'UPDATE "cliente" SET "fafiliacion" = \'%s\' WHERE "idCliente" = %s;' %(fafiliacion, id_cliente)
+        ''' 
+        update "cliente"
+        set "fafiliacion" = DEFAULT
+        where "idCliente" = 1
+        '''
         id_cliente += 1
 
 
 if __name__ == "__main__":
-    generator(100000) 
+    generator(10000) 
+
 
