@@ -254,7 +254,7 @@ on a."idAhorro" = m."idAhorro"
 where p."idCliente" is null;
 
 
---clientes que pidieron prestamo a menos de 3 meses de ingresar al banco
+--8.- clientes que pidieron prestamo a menos de 3 meses de ingresar al banco
 --3 meses = 90 dias
 select c."idCliente", "fafiliacion",
 "fcontratacion" as fecha_prestamo,
@@ -297,7 +297,7 @@ inner join movimiento m
 on a."idAhorro" = m."idAhorro"
 where ("debe"-"haber")-p."monto" >= 0
 
---Total de prestamos otorgados por mes.
+--11.-Total de prestamos otorgados por mes.
 select '01-enero' as mes, count("idPrestamo") as total_prestamos
 from prestamo
 where date_part('month', "fcontratacion") = 1
@@ -347,7 +347,516 @@ from prestamo
 where date_part('month', "fcontratacion") = 12
 order by mes
 
---Total del monto de prestamos otorgados por mes.
-select '01-enero' as mes, sum("idPrestamo") as monto_total_prestamos
+--12.-Total del monto de prestamos otorgados por mes.
+select '01-enero' as mes, sum("monto") as monto_total_prestamos
 from prestamo
 where date_part('month', "fcontratacion") = 1
+union
+select '02-febrero' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 2
+union
+select '03-marzo' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 3
+union
+select '04-abril' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 4
+union
+select '05-mayo' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 5
+union
+select '06-junio' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 6
+union
+select '07-julio' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 7
+union
+select '08-agosto' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 8
+union
+select '09-septiembre' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 9
+union
+select '10-octubre' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 10
+union
+select '11-noviembre' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 11
+union
+select '12-diciembre' as mes, sum("monto") as monto_total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 12
+order by mes
+
+
+--13.-Total de ingresos en cuentas de ahorro y cuentas de inversión por cliente. (solo clientes que tienen ambas cuentas)
+--SUM, movimiento.debe, movimiento inner join ahorro 
+select c."idCliente", a."idAhorro", sum(m."debe")
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+group by c."idCliente", a."idAhorro"
+order by c."idCliente"
+limit 1000
+
+--14.-Total de ingresos por intereses en créditos (prestamos)
+--lo que gana el banco por intereses generados
+select sum((p."monto"*0.15)+(p."monto"*0.04)) as ingresos
+from prestamo p
+--select p."idCliente", p."interes", p."interesmoratorio", p."monto", (p."monto"*0.15)+(p."monto"*0.04) as ganancia
+--from prestamo p
+--order by p."idCliente"
+--limit 2000
+
+
+--16.-¿Que sexo ahorra mas en cuentas de ahorro?
+--cuanto ahorro hubo de todas las mujeres y todos los hombres
+select  c."sexo", sum(m."debe") as ahorros_totales
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+group by c."sexo"
+order by ahorros_totales DESC
+
+
+--17.-¿Que sexo ahorra mas en cuentas de inversión?
+select  c."sexo", sum(m."debe") as ahorros_totales
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+group by c."sexo"
+order by ahorros_totales DES
+
+--18.-¿En que mes ahorran mas las mujeres?
+select c."sexo" as sexo, '01-enero' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 1 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '02-febrero' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 2 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '03-marzo' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 3 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '04-abril' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 4 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '05-mayo' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 5 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '06-junio' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 6 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '07-julio' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 7 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '08-agosto' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 8 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '09-septiembre' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 9 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '10-octubre' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 10 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '11-noviembre' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 11 and c."sexo" = 'F'
+group by sexo
+union
+select c."sexo" as sexo, '12-diciembre' as mes, sum(m."debe") as monto_total_ahorro
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+where date_part('month', a."fcontratacion") = 12 and c."sexo" = 'F'
+group by sexo
+order by monto_total_ahorro DESC
+limit 1
+
+--19.-¿En que mes piden mas prestamos los hombres?
+select c."sexo" as sexo, '01-enero' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 1
+group by c."sexo"
+union
+select c."sexo" as sexo, '02-febrero' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 2
+group by c."sexo"
+union
+select c."sexo" as sexo, '03-marzo' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 3
+group by c."sexo"
+union
+select c."sexo" as sexo, '04-abril' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 4
+group by c."sexo"
+union
+select c."sexo" as sexo, '05-mayo' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 5
+group by c."sexo"
+union
+select c."sexo" as sexo, '06-junio' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 6
+group by c."sexo"
+union
+select c."sexo" as sexo, '07-julio' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 7
+group by c."sexo"
+union
+select c."sexo" as sexo, '08-agosto' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 8
+group by c."sexo"
+union
+select c."sexo" as sexo, '09-septiembre' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 9
+group by c."sexo"
+union
+select c."sexo" as sexo, '10-octubre' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 10
+group by c."sexo"
+union
+select c."sexo" as sexo, '11-noviembre' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 11
+group by c."sexo"
+union
+select c."sexo" as sexo, '12-diciembre' as mes, count(p."idPrestamo") as prestamos_requeridos_por_hombres
+from prestamo p
+inner join cliente c
+on c."idCliente" = p."idCliente"
+where c."sexo" = 'M' and date_part('month', p."fcontratacion") = 12
+group by c."sexo"
+order by prestamos_requeridos_por_hombres DESC
+limit 1
+
+--22.- ¿En que mes prestan mas dinero los ejecutivos?
+select '01-enero' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 1
+union
+select '02-febrero' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 2
+union
+select '03-marzo' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 3
+union
+select '04-abril' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 4
+union
+select '05-mayo' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 5
+union
+select '06-junio' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 6
+union
+select '07-julio' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 7
+union
+select '08-agosto' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 8
+union
+select '09-septiembre' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 9
+union
+select '10-octubre' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 10
+union
+select '11-noviembre' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 11
+union
+select '12-diciembre' as mes, sum("monto") as total_prestamos
+from prestamo
+where date_part('month', "fcontratacion") = 12
+order by mes DESC
+limit 1
+
+--23.- ¿En que mes prestan mas dinero los ejecutivos menores de 30 años?
+select '01-enero' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 1 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '02-febrero' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 2 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '03-marzo' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 3 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '04-abril' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 4 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '05-mayo' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 5 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '06-junio' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 6 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '07-julio' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 7 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '08-agosto' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 8 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '09-septiembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 9 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '10-octubre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 10 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '11-noviembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 11 and date_part('year', age(e."fnacimiento")) < 30
+union
+select '12-diciembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 12 and date_part('year', age(e."fnacimiento")) < 30
+order by total_prestamos DESC
+limit 1
+
+--24.- ¿En que mes prestan mas dinero los ejecutivos mayores de 30 años?
+select '01-enero' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 1 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '02-febrero' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 2 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '03-marzo' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 3 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '04-abril' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 4 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '05-mayo' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 5 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '06-junio' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 6 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '07-julio' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 7 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '08-agosto' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 8 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '09-septiembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 9 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '10-octubre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 10 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '11-noviembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 11 and date_part('year', age(e."fnacimiento")) >= 30
+union
+select '12-diciembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 12 and date_part('year', age(e."fnacimiento")) >= 30
+order by total_prestamos DESC
+--limit 1
+
+
+--25.- ¿En que mes prestan mas dinero los ejecutivos menores de 30 años y de sexo femenino?
+select '01-enero' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 1 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '02-febrero' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 2 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '03-marzo' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 3 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '04-abril' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 4 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '05-mayo' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 5 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '06-junio' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 6 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '07-julio' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 7 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '08-agosto' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 8 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '09-septiembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 9 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '10-octubre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 10 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '11-noviembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 11 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+union
+select '12-diciembre' as mes, sum("monto") as total_prestamos
+from prestamo p, ejecutivo e
+where date_part('month', p."fcontratacion") = 12 and date_part('year', age(e."fnacimiento")) < 30
+and e."sexo" = 'F'
+order by total_prestamos DESC
+limit 1
+
+select * from prestamo
+where "plazo" <= '3'
+limit 10
