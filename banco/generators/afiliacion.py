@@ -18,7 +18,7 @@ cur_ahorro.execute(SCHEMA)
 cur_movimiento.execute(SCHEMA)
 cur_ejecutivo.execute(SCHEMA)
 #query variables
-id_cliente = 20001
+id_cliente = 90001
 fprestamo = fahorro = 0
 #final variables
 fafiliacion = ""
