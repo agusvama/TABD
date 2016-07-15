@@ -42,8 +42,13 @@ for i in range(1, 50001):
     cp = cliente[8]
     fnacimiento = cliente[9]
     telefono = cliente[10]
+    sexo = cliente[11]
+    fafiliacion = cliente[12]
 
-    print "INSERT INTO %s VALUES(%s, '%s', '%s', '%s', '%s', %s, '%s', '%s', %s, '%s', '%s');" %(table, idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono)
+    #print "INSERT INTO %s VALUES(%s, '%s', '%s', '%s', '%s', %s, '%s', '%s', %s, '%s', '%s');" %(table, idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono)
+
+    print 'UPDATE "cliente" SET "idCliente" = %s, "nombre" = \'%s\', "apellidoa" = \'%s\', "apellidob" = \'%s\', "calle" = \'%s\', numero = %s, colonia = \'%s\', ciudad = \'%s\', cp = \'%s\', fnacimiento = \'%s\', telefono = \'%s\', sexo = \'%s\', fafiliacion = \'%s\' WHERE "idAhorro" = %s;' %(idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono, sexo, fafiliacion, idAhorro)
 
     idAhorro +=1
+
 

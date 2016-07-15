@@ -857,6 +857,65 @@ and e."sexo" = 'F'
 order by total_prestamos DESC
 limit 1
 
-select * from prestamo
-where "plazo" <= '3'
-limit 10
+
+--28.-¿Que cantidad promedio de le presta a los clientes que no tienen cuentas de ahorro?
+select c."idCliente", a."idAhorro", p."idPrestamo", p."monto"
+from cliente c
+left join ahorro a
+on c."idCliente" = a."idCliente"
+inner join prestamo p
+on c."idCliente" = p."idCliente"
+where a."idCliente" is NULL --and a."idCliente" = p."idCliente"
+order by c."idCliente"
+
+select 'clientes sin cta ahorro' as personas, round(avg(p."monto")) as promedio_prestamos
+from cliente c
+left join ahorro a
+on c."idCliente" = a."idCliente"
+inner join prestamo p
+on c."idCliente" = p."idCliente"
+where a."idCliente" is NULL --and a."idCliente" = p."idCliente"
+
+
+--29.-¿Se le presta mas a los cliente con cuentas de ahorro o a los que no tiene cuentas de ahorro?
+select 'clientes CON cta ahorro' as personas, sum(p."monto") as total_prestamos
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join prestamo p
+on c."idCliente" = p."idCliente"
+--where a."idCliente" is NULL --and a."idCliente" = p."idCliente"
+union
+select 'clientes SIN cta ahorro' as personas, sum(p."monto") as total_prestamos
+from cliente c
+left join ahorro a
+on c."idCliente" = a."idCliente"
+inner join prestamo p
+on c."idCliente" = p."idCliente"
+where a."idCliente" is NULL --and a."idCliente" = p."idCliente"
+order by total_prestamos DESC
+
+
+--30.-¿Se le presta mas dinero a los clientes que solo tienen cuentas de ahorro o 
+--a los que solo tienen cuentas de inversión?
+select 'clientes CON cta ahorro' as personas, sum(p."monto") as total_prestamos
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join prestamo p
+on c."idCliente" = p."idCliente"
+union
+select 'clientes CON cta ahorro e inversion' as personas, sum(p."monto") as total_prestamos
+from cliente c
+inner join ahorro a
+on c."idCliente" = a."idCliente"
+inner join movimiento m
+on a."idAhorro" = m."idAhorro"
+inner join prestamo p
+on c."idCliente" = p."idCliente"
+order by total_prestamos DESC
+
+select * from cliente
+where "idCliente" = 87726
+select * from ahorro
+where "idAhorro" <= 10
