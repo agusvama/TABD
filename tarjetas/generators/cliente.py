@@ -3,7 +3,8 @@
 from faker import Factory
 fake = Factory.create()
 table = '"cliente"'
-idAhorro = 1
+#idAhorro = 1
+idCliente = 1
 
 #hacer una consulta hacia la BD banco en la tabla: ahorro
 import psycopg2
@@ -16,17 +17,17 @@ cur = conn.cursor()
 cur_cliente.execute("set search_path to banco;")
 cur.execute("set search_path to banco;")
 
-for i in range(1, 50001):
+for i in range(1, 40001):
 #from table ahorro get idCliente, then, from table cliente get all data, so...
     #first we have to get an idCliente
-    SQL1 = 'SELECT "idCliente" FROM ahorro WHERE "idAhorro" = (%s);'
-    get_this_idcliente = idAhorro
-    get_this_idcliente = (str(get_this_idcliente), )
-    cur.execute(SQL1, get_this_idcliente)
-    idcliente_ahorro = cur.fetchone()
+    #SQL1 = 'SELECT "idCliente" FROM ahorro WHERE "idAhorro" = (%s);'
+    #get_this_idcliente = idAhorro
+    #get_this_idcliente = (str(get_this_idcliente), )
+    #cur.execute(SQL1, get_this_idcliente)
+    #idcliente_ahorro = cur.fetchone()
     #####
-    get_this_cliente = idcliente_ahorro[0]
-    get_this_cliente = (str(get_this_cliente), )
+    #get_this_cliente = idcliente_ahorro[0]
+    get_this_cliente = (str(idCliente), )
     SQL = 'SELECT * FROM cliente WHERE "idCliente" = (%s);'
     cur_cliente.execute(SQL, get_this_cliente)
     cliente = cur_cliente.fetchone()
@@ -47,8 +48,11 @@ for i in range(1, 50001):
 
     #print "INSERT INTO %s VALUES(%s, '%s', '%s', '%s', '%s', %s, '%s', '%s', %s, '%s', '%s');" %(table, idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono)
 
-    print 'UPDATE "cliente" SET "idCliente" = %s, "nombre" = \'%s\', "apellidoa" = \'%s\', "apellidob" = \'%s\', "calle" = \'%s\', numero = %s, colonia = \'%s\', ciudad = \'%s\', cp = \'%s\', fnacimiento = \'%s\', telefono = \'%s\', sexo = \'%s\', fafiliacion = \'%s\' WHERE "idAhorro" = %s;' %(idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono, sexo, fafiliacion, idAhorro)
+#    print 'UPDATE "cliente" SET "idCliente" = %s, "nombre" = \'%s\', "apellidoa" = \'%s\', "apellidob" = \'%s\', "calle" = \'%s\', numero = %s, colonia = \'%s\', ciudad = \'%s\', cp = \'%s\', fnacimiento = \'%s\', telefono = \'%s\', sexo = \'%s\', fafiliacion = \'%s\' WHERE "idAhorro" = %s;' %(idcliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono, sexo, fafiliacion, idAhorro)
 
-    idAhorro +=1
+    print 'INSERT INTO "cliente" VALUES("idCliente" = %s  "nombre" = \'%s\', "apellidoa" = \'%s\', "apellidob" = \'%s\', "calle" = \'%s\', numero = %s, colonia = \'%s\', ciudad = \'%s\', cp = \'%s\', fnacimiento = \'%s\', telefono = \'%s\', sexo = \'%s\', fafiliacion = \'%s\');' %(idCliente, nombre, apellidoa, apellidob, calle, numero, colonia, ciudad, cp, fnacimiento, telefono, sexo, fafiliacion)
+
+    #idAhorro +=1
+    idCliente +=1
 
 
