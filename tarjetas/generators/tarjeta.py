@@ -13,7 +13,7 @@ cur.execute("set search_path to tarjeta;")
 cur_ahorro.execute("set search_path to banco;")
 
 idAhorro = 1
-table = '"tarjetaCredito"'
+table = '"tarjeta_credito"'
 for i in range(1, 50001):
     #from table cliente get nombre, apellido, apellido where idAhorro = N
     SQL = 'SELECT "nombre", "apellidoa", "apellidob" FROM cliente WHERE "idAhorro" = (%s)' 
@@ -43,6 +43,9 @@ for i in range(1, 50001):
     else:
         tipo = "Mastercard"
 
-    print "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', %s);" %(table, idTarjeta, nombre, apellidoa, apellidob, fexpire, cvc, tipo, idCliente)
+    print "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, %s);" %(table, idTarjeta, nombre, apellidoa, apellidob, fexpire, cvc, tipo, idCliente, idAhorro)
+    #print 'UPDATE tarjeta_credito SET "idTarjeta" = '%s', nombre = '%s', apellidoa = '%s', apellidob = '%s', "fechaVencimiento" = '%s', cvc = '%s', tipo = '%s', "idCliente" = %s, "idAhorro" = %s) WHERE ;' %(idTarjeta, nombre, apellidoa, apellidob, fexpire, cvc, tipo, idCliente, idAhorro)
 
     idAhorro += 1
+
+

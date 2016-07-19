@@ -296,6 +296,1479 @@ select 'enero 17' as mes, count("idAhorro") as "tarjetas", round((count("idAhorr
 from tarjeta_datos
 where date_part('year', "fechaEmision") = 2017
 
-UPDATE tarjeta_datos SET "fechaEmision" = '2016/01/01' WHERE "fechaEmision" = '2017/01/01'
+--UPDATE tarjeta_datos SET "fechaEmision" = '2016/01/01' WHERE "fechaEmision" = '2017/01/01'
 
 --6.- ¿Quien usa mas veces su TC las mujeres o los hombres?
+select c."idCliente", c.sexo, tc."idTarjeta", o.operacion
+from cliente c
+inner join tarjeta_credito tc
+on c."idAhorro" = tc."idAhorro"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
+limit 10
+
+select 'F' as sexo, count(o."idTarjeta")
+from tarjeta_credito tc
+inner join cliente c
+on tc."idAhorro"  = c."idAhorro"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
+where c.sexo = 'F'
+
+UNION
+select 'M' as sexo, count(o."idTarjeta")
+from tarjeta_credito tc
+inner join cliente c
+on tc."idAhorro"  = c."idAhorro"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
+where c.sexo = 'M'
+
+
+--7.- ¿Quien gasta mas con TC las mujeres o los hombres?
+--select * from operacion where operacion > 0, sexo = F, M, inner join: tc, cliente, operacion
+select 'F' as sexo, count(o."idTarjeta")
+from tarjeta_credito tc
+inner join cliente c
+on tc."idAhorro"  = c."idAhorro"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
+where c.sexo = 'F' and operacion < 0
+
+UNION
+select 'M' as sexo, count(o."idTarjeta")
+from tarjeta_credito tc
+inner join cliente c
+on tc."idAhorro"  = c."idAhorro"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
+where c.sexo = 'M'and operacion < 0
+
+--8.- Gasto promedio de las tarjetas de crédito por mes.
+select '01-enero' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 1
+UNION
+select '02-febrero' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 2
+UNION
+select '03-marzo' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 3
+UNION
+select '04-abril' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 4
+UNION
+select '05-mayo' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 5
+UNION
+select '06-junio' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 6
+UNION
+select '07-julio' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 7
+UNION
+select '08-agosto' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 8
+UNION
+select '09-septiembre' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 9
+UNION
+select '10-octubre' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 10
+UNION
+select '11-noviembre' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 11
+UNION
+select '12-diciembre' as mes, avg(operacion)
+from operacion
+where operacion < 0 and date_part('month', fecha_operacion) = 12
+--group by "idTarjeta"
+
+--9.- Gasto promedio de las tarjetas de crédito por mes y por sexo.
+--select * from operacion
+select '01-enero' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'M'
+UNION
+select '01-enero' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'F'
+
+UNION
+select '02-febrero' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'M'
+UNION
+select '02-febrero' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'F'
+
+UNION
+select '03-marzo' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'M'
+UNION
+select '03-marzo' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'F'
+
+UNION
+select '04-abril' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'M'
+UNION
+select '04-abril' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'F'
+
+UNION
+select '05-mayo' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'M'
+UNION
+select '05-mayo' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'F'
+
+UNION
+select '06-junio' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'M'
+UNION
+select '06-junio' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'F'
+
+UNION
+select '07-julio' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'M'
+UNION
+select '07-julio' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'F'
+
+UNION
+select '08-agosto' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'M'
+UNION
+select '08-agosto' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'F'
+
+UNION
+select '09-septiembre' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'M'
+UNION
+select '09-septiembre' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'F'
+
+UNION
+select '10-octubre' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'M'
+UNION
+select '10-octubre' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'F'
+
+UNION
+select '11-noviembre' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'M'
+UNION
+select '11-noviembre' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'F'
+
+UNION
+select '12-diciembre' as mes, 'M' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'M'
+UNION
+select '12-diciembre' as mes, 'F' as sexo, avg(operacion)
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'F'
+order by mes
+
+--10.- Gasto promedio de las tarjetas de crédito por mes, sexo y rango de edad.
+--select date_part('year', age(fnacimiento)) as edad
+--from cliente
+--where date_part('year', age(fnacimiento)) BETWEEN 18 and 30
+
+select '01-enero' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '01-enero' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '01-enero' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '01-enero' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '01-enero' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '01-enero' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '01-enero' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '01-enero' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '01-enero' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '01-enero' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 1 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--ahora la misma consulta, cambiando el mes a febrero
+UNION
+select '02-febrero' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '02-febrero' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '02-febrero' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '02-febrero' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '02-febrero' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '02-febrero' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '02-febrero' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '02-febrero' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '02-febrero' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '02-febrero' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 2 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--ahora la misma consulta, cambiando el mes a marzo
+UNION
+select '03-marzo' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '03-marzo' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '03-marzo' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '03-marzo' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '03-marzo' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '03-marzo' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '03-marzo' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '03-marzo' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '03-marzo' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '03-marzo' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 3 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--misma consulta, mes abril
+UNION
+select '04-abril' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '04-abril' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '04-abril' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '04-abril' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '04-abril' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '04-abril' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '04-abril' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '04-abril' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '04-abril' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '04-abril' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 4 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--mayo
+UNION
+select '05-mayo' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '05-mayo' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '05-mayo' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '05-mayo' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '05-mayo' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '05-mayo' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '05-mayo' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '05-mayo' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '05-mayo' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '05-mayo' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 5 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--junio
+UNION
+select '06-junio' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '06-junio' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '06-junio' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '06-junio' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '06-junio' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '06-junio' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '06-junio' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '06-junio' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '06-junio' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '06-junio' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 6 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--julio
+UNION
+select '07-julio' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '07-julio' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '07-julio' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '07-julio' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '07-julio' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '07-julio' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '07-julio' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '07-julio' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '07-julio' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '07-julio' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 7 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--agosto
+UNION
+select '08-agosto' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '08-agosto' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '08-agosto' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '08-agosto' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '08-agosto' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '08-agosto' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '08-agosto' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '08-agosto' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '08-agosto' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '08-agosto' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 8 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--septiembre
+UNION
+select '09-septiembre' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '09-septiembre' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '09-septiembre' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '09-septiembre' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '09-septiembre' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '09-septiembre' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '09-septiembre' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '09-septiembre' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '09-septiembre' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '09-septiembre' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 9 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--octubre
+UNION
+select '10-octubre' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '10-octubre' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '10-octubre' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '10-octubre' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '10-octubre' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '10-octubre' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '10-octubre' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '10-octubre' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '10-octubre' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '10-octubre' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 10 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--noviembre
+UNION
+select '11-noviembre' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '11-noviembre' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '11-noviembre' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '11-noviembre' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '11-noviembre' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '11-noviembre' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '11-noviembre' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '11-noviembre' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '11-noviembre' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '11-noviembre' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 11 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+--diciembre
+UNION
+select '12-diciembre' as mes, 'M' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+UNION
+select '12-diciembre' as mes, 'F' as sexo, '15 a 17' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 15 and 17
+
+UNION
+select '12-diciembre' as mes, 'M' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+UNION
+select '12-diciembre' as mes, 'F' as sexo, '18 a 31' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 18 and 31
+
+UNION
+select '12-diciembre' as mes, 'M' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+UNION
+select '12-diciembre' as mes, 'F' as sexo, '31 a 40' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 31 and 40
+
+UNION
+select '12-diciembre' as mes, 'M' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+UNION
+select '12-diciembre' as mes, 'F' as sexo, '41 a 61' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) BETWEEN 41 and 61
+
+UNION
+select '12-diciembre' as mes, 'M' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'M'
+and date_part('year', age(c.fnacimiento)) > 61
+UNION
+select '12-diciembre' as mes, 'F' as sexo, '61 o mas' as rango_edad, avg(operacion) as gasto_promedio_tc
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join cliente c
+on tc."idCliente" = c."idCliente"
+where operacion < 0 and date_part('month', fecha_operacion) = 12 and c.sexo = 'F'
+and date_part('year', age(c.fnacimiento)) > 61
+
+order by mes, rango_edad
+
+--11.- Clientes que liquidan su cuenta antes de su fecha de corte.
+--select * from tarjeta_datos where limite < 0
+--UPDATE tarjeta_datos SET limite = 1500 WHERE limite < 0
+select tc."idCliente", o.fecha_operacion, td.fcorte_dia, 
+o.operacion, td.limite, limite + operacion as debe
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join tarjeta_datos td
+on tc."idAhorro" = td."idAhorro"
+where fcorte_dia < date_part('day', fecha_operacion) and (limite+operacion) < 0
+order by tc."idCliente" 
+
+--12.- Clientes que pagan mas intereses
+--que su tasa de interes es la mas alta

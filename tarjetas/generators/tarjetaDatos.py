@@ -52,7 +52,9 @@ for i in range(1, 50001):
     ejecutivo = cur_ejecutivo.fetchone()
     idEjecutivo = ejecutivo[0]
     idSucursal = ejecutivo[1]
+    fcorte_mes = fake.random_int(min=1, max=12)
+    fcorte_dia = fake.random_int(min=1, max=28)
 
-    print "INSERT INTO %s VALUES('%s', %s, %s, %s, %s, %s, %s);" %(table, femision, limite, tasa, idEjecutivo, idSucursal, idCliente, idAhorro)
+    print "INSERT INTO %s VALUES('%s', %s, %s, %s, %s, %s, %s, '%s', '%s');" %(table, femision, limite, tasa, idEjecutivo, idSucursal, idCliente, idAhorro, fcorte_mes, fcorte_dia)
 
     idAhorro += 1
