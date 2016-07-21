@@ -1760,15 +1760,57 @@ order by mes, rango_edad
 --11.- Clientes que liquidan su cuenta antes de su fecha de corte.
 --select * from tarjeta_datos where limite < 0
 --UPDATE tarjeta_datos SET limite = 1500 WHERE limite < 0
-select tc."idCliente", o.fecha_operacion, td.fcorte_dia, 
-o.operacion, td.limite, limite + operacion as debe
+--select tc."idCliente", td."idAhorro", --o.fecha_operacion, td.fcorte_dia, 
+----o.operacion, 
+--td.limite, --(limite-500)/ 5 as cta_ahorro,
+--sum(o.operacion) as debe--- monto cta. ahorro = (limite-500)/5
+--from operacion o
+--inner join tarjeta_credito tc
+--on o."idTarjeta" = tc."idTarjeta"
+--inner join tarjeta_datos td
+--on tc."idAhorro" = td."idAhorro"
+--where fcorte_dia < date_part('day', fecha_operacion) --and (limite+operacion) > 0
+----and operacion > 0
+--and tc."idCliente" = 28
+--group by tc."idCliente", td."idAhorro", o.fecha_operacion
+--order by tc."idCliente" 
+
+select tc."idCliente", td."idAhorro", td.limite, sum(o.operacion) as estado_cta
 from operacion o
 inner join tarjeta_credito tc
 on o."idTarjeta" = tc."idTarjeta"
 inner join tarjeta_datos td
 on tc."idAhorro" = td."idAhorro"
-where fcorte_dia < date_part('day', fecha_operacion) and (limite+operacion) < 0
+where fcorte_dia < date_part('day', fecha_operacion) --operaciones anteriores a su fecha de corte
+--and tc."idCliente" = 28
+group by tc."idCliente", td."idAhorro"
+having sum(o.operacion) > 0 			--cliente no ha hecho depositos que liquiden sus gastos
 order by tc."idCliente" 
+
 
 --12.- Clientes que pagan mas intereses
 --que su tasa de interes es la mas alta
+select c."idCliente", td.tasa
+from cliente c, tarjeta_datos td
+where c."idCliente" = td."idCliente" and td.tasa = 7
+
+--13.- Clientes que pagan mas intereses pero no se atrasan en sus pagos.
+select tc."idCliente", td."idAhorro", td.limite, sum(o.operacion) as estado_cta
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join tarjeta_datos td
+on tc."idAhorro" = td."idAhorro"
+where fcorte_dia < date_part('day', fecha_operacion) --operaciones anteriores a su fecha de corte
+and td.tasa = 7
+group by tc."idCliente", td."idAhorro"
+having sum(o.operacion) > 0 			--cliente no ha hecho depositos que liquiden sus gastos
+order by tc."idCliente" 
+
+--14.- Clientes que se les otorga una TC y la usan el mismo día.
+select td."fechaEmision", o.fecha_operacion
+from tarjeta_datos td
+inner join tarjeta_credito tc
+on td."idAhorro" = tc."idAhorro"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
