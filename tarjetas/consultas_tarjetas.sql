@@ -1832,6 +1832,7 @@ group by tc."idCliente", td."idAhorro", o."idOperacion"
 having sum(o.operacion) > 0 			--cliente no ha hecho depositos que liquiden sus gastos
 order by tc."idCliente" 
 
+--ejemplos de insercion antes y despues de fecha de corte
 select * from tarjeta_credito tc
 where tc."idAhorro" = 59
 select * from tarjeta_datos td
@@ -1843,3 +1844,63 @@ select max("idOperacion") from operacion
 INSERT INTO operacion VALUES(99999, '3669898826240870', 200, '2016/07/11')
 UPDATE operacion SET fecha_operacion = '2016/07/08' WHERE "idOperacion" = 99999
 DELETE FROM operacion WHERE "idOperacion" = 99999
+--ejemplos de insercion antes y despues de fecha de corte
+
+--16.- Clientes que rebasaran su limite de crédito si acumulan 3 meses de morosidad.
+--17.- Se les otorgara un aumento de 20% de su crédito a los cliente que nunca se atrasan en sus pagos.
+--Aplicar ese cambio en la BD.
+
+--18.- Repetir consulta 4 con los nuevos datos.
+
+--19.- se les reducirá su limite de crédito a todos los clientes que tengan morosidad en sus pagos. La reducción
+--será de 50%. Aplicar cambio en la BD.
+
+--20.- repetir consulta 4 con nuevos datos.
+
+--21.- Cuantos clientes tienen una deuda superior a su limite de crédito.
+select o."idTarjeta", o.operacion 
+from operacion o
+--where o.operacion < 0 order by "idTarjeta"
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join tarjeta_datos td
+on td."idAhorro" = tc."idAhorro"
+where o.operacion < 0 --(deuda)
+order by "idTarjeta"
+
+select distinct(c."idCliente"), tc."idTarjeta", o.operacion
+from cliente c
+inner join tarjeta_credito tc
+on c."idCliente" = tc."idCliente"
+inner join operacion o
+on tc."idTarjeta" = o."idTarjeta"
+where o.operacion < 0
+order by c."idCliente"
+
+select *
+from tarjeta_datos
+
+--22.- Numero de hombres y mujeres que tienen una deuda superior a su limite de crédito.
+
+--23.- Ejecutivos que otorgaron TC que cayeron en morosidad.
+
+--24.- Ejecutivos que otorgaron TC que nunca se atrasan en sus pagos.
+
+--25.- Numero de Tarjetas otorgadas por ejecutivos por mes.
+
+--26.- Que ejecutivos otorgan mas tarjetas de crédito, hombre o mujeres.
+
+--27.- Que ejecutivos otorgan mas tarjetas de crédito que no caen en morosidad, hombre o mujeres.
+
+--28.- Se les otorgara una tarjeta adicional con el doble del limite de su tarjeta actual a los clientes que tienen
+--un rango de edad entre 25 y 35 años, tiene un limite actual mayor a 20,000 y que no tengan pagos atrasados.
+--Aplique el cambio en la BD.
+
+--29.- TOP 100 de los clientes que tiene mas de una TC y su limite de crédito sumado. DESC.
+
+--30.- TOP 100 de los clientes que mas endeudados están.
+
+select *--, count("idCliente") 
+from cliente
+where "idCliente" = 8533
+--group by "idCliente"
