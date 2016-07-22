@@ -1814,3 +1814,32 @@ inner join tarjeta_credito tc
 on td."idAhorro" = tc."idAhorro"
 inner join operacion o
 on tc."idTarjeta" = o."idTarjeta"
+
+
+select tc."idCliente", td."idAhorro", td.limite, sum(o.operacion) as estado_cta, o."idOperacion"
+from operacion o
+inner join tarjeta_credito tc
+on o."idTarjeta" = tc."idTarjeta"
+inner join tarjeta_datos td
+on tc."idAhorro" = td."idAhorro"
+--la fecha de operacion es mayor a la fecha de corte,
+--pagos o gastos que hizo despues de la fecha corte
+--where date_part('day', fecha_operacion) > fcorte_dia
+--pagos o gastos que hizo antes de la fecha corte
+where date_part('day', fecha_operacion) <= fcorte_dia
+--and tc."idCliente" = 28
+group by tc."idCliente", td."idAhorro", o."idOperacion"
+having sum(o.operacion) > 0 			--cliente no ha hecho depositos que liquiden sus gastos
+order by tc."idCliente" 
+
+select * from tarjeta_credito tc
+where tc."idAhorro" = 59
+select * from tarjeta_datos td
+where td."idAhorro" = 59
+select * from operacion o
+where "idOperacion" = 99999 
+select max("idOperacion") from operacion
+
+INSERT INTO operacion VALUES(99999, '3669898826240870', 200, '2016/07/11')
+UPDATE operacion SET fecha_operacion = '2016/07/08' WHERE "idOperacion" = 99999
+DELETE FROM operacion WHERE "idOperacion" = 99999
