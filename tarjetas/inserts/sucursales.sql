@@ -1,11 +1,12 @@
 set search_path to tarjeta;
-INSERT INTO "sucursal" VALUES(1, 'Louis Ranch', 994,'Forks','Nebraska',07627,'1994/3/27', '9922150026');
-INSERT INTO "sucursal" VALUES(2, 'Pamela Flats', 554,'Rest','West Virginia',50023,'1994/3/27', '8155715067');
-INSERT INTO "sucursal" VALUES(3, 'Ian Neck', 144,'Canyon','Ohio',70407,'1994/3/27', '2004458312');
-INSERT INTO "sucursal" VALUES(4, 'Elizabeth Hollow', 849,'Extensions','Utah',94891,'1994/3/27', '0000008978');
-INSERT INTO "sucursal" VALUES(5, 'Navarro Road', 209,'Union','Louisiana',59121,'1994/3/27', '1233028920');
-INSERT INTO "sucursal" VALUES(6, 'David Light', 173,'Alley','Washington',79169,'1994/3/27', '9519432466');
-INSERT INTO "sucursal" VALUES(7, 'Mark Park', 108,'Inlet','Minnesota',11060,'1994/3/27', '4300866972');
-INSERT INTO "sucursal" VALUES(8, 'Carroll Dam', 880,'Orchard','New York',91322,'1994/3/27', '8378977874');
-INSERT INTO "sucursal" VALUES(9, 'Hughes Rue', 359,'Vista','Connecticut',61041,'1994/3/27', '4954114418');
-INSERT INTO "sucursal" VALUES(10, 'Byrd Extensions', 904,'Islands','Indiana',87365,'1994/3/27', '6909753207');
+
+INSERT INTO sucursal VALUES(1, 'Chad Wall','552','Turnpike', 'Idaho', '89946', '1994/3/27', '2001002230');
+INSERT INTO sucursal VALUES(2, 'Park Knolls','479','Vista', 'Massachusetts', '92471', '1994/3/27', '2401405085');
+INSERT INTO sucursal VALUES(3, 'Casey Radial','985','Brook', 'New Jersey', '68302', '1994/3/27', '6275057312');
+INSERT INTO sucursal VALUES(4, 'Hayes Mills','930','Tunnel', 'New York', '37222', '1994/3/27', '3618487510');
+INSERT INTO sucursal VALUES(5, 'Kathy Ferry','006','Valley', 'Massachusetts', '70973', '1994/3/27', '9198555150');
+INSERT INTO sucursal VALUES(6, 'Paul Plain','157','Square', 'New York', '69208', '1994/3/27', '1662831893');
+INSERT INTO sucursal VALUES(7, 'Charles Cliff','248','Lock', 'Colorado', '73879', '1994/3/27', '0511795406');
+INSERT INTO sucursal VALUES(8, 'Gina Mills','089','Fork', 'Maryland', '62703', '1994/3/27', '9571123957');
+INSERT INTO sucursal VALUES(9, 'Patricia Views','410','Lane', 'West Virginia', '08938', '1994/3/27', '2375201993');
+INSERT INTO sucursal VALUES(10, 'Tyler Mountains','336','Mountain', 'South Carolina', '52828', '1994/3/27', '3838028766');

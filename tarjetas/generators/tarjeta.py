@@ -48,4 +48,6 @@ for i in range(1, 50001):
 
     idAhorro += 1
 
-
+#una tarjeta por cada cta ahorro
+#generar idtarjeta, tipo, cvc
+#get idahorro, idcliente y completar haciendo un UPDATE
