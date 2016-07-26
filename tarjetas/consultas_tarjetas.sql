@@ -1775,18 +1775,37 @@ order by mes, rango_edad
 --group by tc."idCliente", td."idAhorro", o.fecha_operacion
 --order by tc."idCliente" 
 
-select tc."idCliente", td."idAhorro", td.limite, sum(o.operacion) as estado_cta
+set search_path to tarjeta_credito
+select tc.id_cliente, td.id_ahorro, td.limite, sum(o.operacion) as estado_cta
 from operacion o
-inner join tarjeta_credito tc
-on o."idTarjeta" = tc."idTarjeta"
+inner join tarjeta tc
+on o.id_tarjeta = tc.id_tarjeta
 inner join tarjeta_datos td
-on tc."idAhorro" = td."idAhorro"
+on tc.id_ahorro = td.id_ahorro
 where fcorte_dia < date_part('day', fecha_operacion) --operaciones anteriores a su fecha de corte
 --and tc."idCliente" = 28
-group by tc."idCliente", td."idAhorro"
+group by tc.id_cliente, td.id_ahorro
 having sum(o.operacion) > 0 			--cliente no ha hecho depositos que liquiden sus gastos
-order by tc."idCliente" 
+order by tc.id_cliente
 
+select t.id_cliente, o.operacion
+from tarjeta t
+inner join operacion o
+on t.id_tarjeta = o.id_tarjeta
+
+select *
+from tarjeta
+where id_cliente = 42211
+
+select o.id_tarjeta, o.id_operacion, sum(operacion) as saldo, 
+o.fecha_operacion
+from operacion o
+where id_tarjeta = '4973 6047 8585 9945'
+group by o.id_tarjeta, o.id_operacion
+
+select fecha_corte
+from tarjeta_datos
+where id_tarjeta = '4973 6047 8585 9945'
 
 --12.- Clientes que pagan mas intereses
 --que su tasa de interes es la mas alta
