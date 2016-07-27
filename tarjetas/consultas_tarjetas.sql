@@ -1797,11 +1797,18 @@ select *
 from tarjeta
 where id_cliente = 42211
 
-select o.id_tarjeta, o.id_operacion, sum(operacion) as saldo, 
-o.fecha_operacion
-from operacion o
+select *
+from operacion
 where id_tarjeta = '4973 6047 8585 9945'
-group by o.id_tarjeta, o.id_operacion
+
+select o.id_tarjeta, o.id_operacion, sum(operacion) as saldo, 
+o.fecha_operacion, td.fecha_corte
+from operacion o, tarjeta_datos td
+where o.id_tarjeta = '4973 6047 8585 9945'
+and td.id_tarjeta = '4973 6047 8585 9945'
+and td.fecha_corte > date_part('day', o.fecha_operacion)
+group by o.id_tarjeta, o.id_operacion, td.fecha_corte
+--having sum(operacio) > 0
 
 select fecha_corte
 from tarjeta_datos
