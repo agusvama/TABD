@@ -641,6 +641,20 @@ group by c."sexo"
 order by prestamos_requeridos_por_hombres DESC
 limit 1
 
+--20.- ¿Que ejecutivos prestan mas dinero, los hombres o las mujeres?
+set search_path to banco
+select count(p."idEjecutivo") as eje_hombres
+from prestamo p
+inner join ejecutivo e
+on p."idEjecutivo" = e."idEjecutivo"
+where e.sexo = 'M'
+union
+select count(p."idEjecutivo") as eje_mujeres
+from prestamo p
+inner join ejecutivo e
+on p."idEjecutivo" = e."idEjecutivo"
+where e.sexo = 'F'
+
 --22.- ¿En que mes prestan mas dinero los ejecutivos?
 select '01-enero' as mes, sum("monto") as total_prestamos
 from prestamo
@@ -920,3 +934,5 @@ select * from cliente
 where "idCliente" = 87726
 select * from ahorro
 where "idAhorro" <= 10
+
+--

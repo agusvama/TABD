@@ -1,4 +1,4 @@
-﻿set search_path to tarjeta;
+﻿set search_path to tarjeta_credito;
 
 --1.- Porcentaje de clientes por sexo.
 select "sexo", count("sexo"), ((count("sexo")*100)/100000.0) as "porcentaje" from cliente
@@ -1798,17 +1798,60 @@ from tarjeta
 where id_cliente = 42211
 
 select *
-from operacion
-where id_tarjeta = '4973 6047 8585 9945'
-
-select o.id_tarjeta, o.id_operacion, sum(operacion) as saldo, 
-o.fecha_operacion, td.fecha_corte
-from operacion o, tarjeta_datos td
+from operacion o
 where o.id_tarjeta = '4973 6047 8585 9945'
-and td.id_tarjeta = '4973 6047 8585 9945'
-and td.fecha_corte > date_part('day', o.fecha_operacion)
+
+
+select *
+from operacion
+where id_tarjeta = '6779 0168 9700 7505'
+UPDATE operacion SET operacion = 1 WHERE id_tarjeta = '6779 0168 9700 7505'
+
+select * from operacion
+select * from tarjeta_datos WHERE id_tarjeta = '6779 0168 9700 7505'
+select max(id_operacion)
+from operacion
+INSERT INTO  operacion VALUES(99999, '6779 0168 9700 7505', -9000, '2010/06/10')
+delete from operacion where id_operacion = 99999
+
+--11.- refactored
+select o.id_tarjeta, operacion,
+o.fecha_operacion, td.fecha_corte
+from operacion o--, tarjeta_datos td
+inner join tarjeta_datos td
+on o.id_tarjeta = td.id_tarjeta
+--where o.id_tarjeta = '6779 0168 9700 7505'
+--operaciones anteriores a su fecha de corte
+and td.fecha_corte < date_part('day', o.fecha_operacion)
+--operaciones posterioes a su fecha de corte
+--and td.fecha_corte > date_part('day', o.fecha_operacion)
 group by o.id_tarjeta, o.id_operacion, td.fecha_corte
---having sum(operacio) > 0
+--pagos
+--having sum(operacion) > 0
+--gastos
+having sum(operacion) < 0
+
+set search_path to tarjeta_credito;
+select t.id_cliente--, sum(operacion) as saldo
+from operacion o
+inner join tarjeta t
+on o.id_tarjeta = t.id_tarjeta
+inner join tarjeta_datos td
+on t.id_tarjeta = td.id_tarjeta
+--where o.id_tarjeta = '4973 6047 8585 9945'
+--operaciones anteriores a su fecha de corte
+--and td.fecha_corte < date_part('day', o.fecha_operacion)
+--operaciones posteriores a su fecha de corte
+and td.fecha_corte > date_part('day', o.fecha_operacion)
+group by t.id_cliente, o.id_tarjeta, o.id_operacion
+--pagos
+having sum(operacion) > 0
+--gastos
+--having sum(operacion) < 0
+
+select id_tarjeta
+from tarjeta
+where id_cliente = 61661
 
 select fecha_corte
 from tarjeta_datos
